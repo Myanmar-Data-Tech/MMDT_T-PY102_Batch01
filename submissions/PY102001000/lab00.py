@@ -6,5 +6,6 @@ def submission_check():
     Example:
     "PY102001001"
     """
+    # testing grade scores. 
     return "PY102001000"
 
