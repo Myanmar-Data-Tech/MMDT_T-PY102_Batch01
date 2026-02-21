@@ -5,9 +5,11 @@ import os
 import subprocess
 import sys
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import List, Set
+from datetime import datetime
+import csv
 
 from zoneinfo import ZoneInfo
 
@@ -46,6 +48,8 @@ LAB_TO_TEST = {
     "lab06.py": "autograder/tests/test_lab06.py",
     "lab07.py": "autograder/tests/test_lab07.py",
 }
+
+GRADEBOOK_PATH = REPO_ROOT / "autograder" / "gradebook.csv"
 
 # Late policy
 GRACE_DAYS = 2
@@ -152,7 +156,6 @@ def apply_late_policy(
         messages.append("✅ No late deduction applied")
 
     return final_score, messages
-
 
 def main() -> None:
     base_ref = os.environ.get("BASE_REF", "main")
@@ -267,6 +270,17 @@ def main() -> None:
         print(" -", msg)
 
     print(f"FINAL SCORE: {final_score}/{max_points}")
+    write_header = not GRADEBOOK_PATH.exists()
+
+    with GRADEBOOK_PATH.open("a", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        if write_header:
+            writer.writerow(["student_id", "lab", "final_score", "max_points"
+                             , "submitted_at"])
+        for lab in sorted(labs_touched):
+            writer.writerow([student_id, lab, final_score, max_points,
+                             submitted_at.isoformat() if submitted_at else ""])
+
     sys.exit(0)
 
 
