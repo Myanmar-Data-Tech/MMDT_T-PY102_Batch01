@@ -13,7 +13,7 @@ from zoneinfo import ZoneInfo
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 SUBMISSIONS_DIR = REPO_ROOT / "submissions"
-RESULTS_FILE = REPO_ROOT / "autograder" / "results.json"
+RESULTS_FILE = None
 
 # Student IDs: PY102001001 .. PY102001020
 ID_PREFIX = "PY102001"
@@ -34,6 +34,17 @@ LAB_DEADLINES = {
     "lab05.py": "2026-04-04 23:59",
     "lab06.py": "2026-04-11 23:59",
     "lab07.py": "2026-04-18 23:59",
+}
+
+LAB_TO_TEST = {
+    "lab00.py": "autograder/tests/test_lab00.py",
+    "lab01.py": "autograder/tests/test_lab01.py",
+    "lab02.py": "autograder/tests/test_lab02.py",
+    "lab03.py": "autograder/tests/test_lab03.py",
+    "lab04.py": "autograder/tests/test_lab04.py",
+    "lab05.py": "autograder/tests/test_lab05.py",
+    "lab06.py": "autograder/tests/test_lab06.py",
+    "lab07.py": "autograder/tests/test_lab07.py",
 }
 
 # Late policy
@@ -198,6 +209,7 @@ def main() -> None:
         sys.exit(1)
 
     student_dir = SUBMISSIONS_DIR / student_id
+    results_file = student_dir / "autograder_results.json"
     if not student_dir.exists():
         print(f"❌ Student folder does not exist: {student_dir}")
         sys.exit(1)
@@ -223,15 +235,20 @@ def main() -> None:
     env["LABS_TOUCHED"] = ",".join(sorted(labs_touched))
 
     # 5) Run tests
-    cmd = ["pytest", "-q", "autograder/tests", "--timeout=5"]
+    tests_to_run = [LAB_TO_TEST[lab] for lab in sorted(labs_touched)]
+    cmd = ["pytest", "-q", *tests_to_run, "--timeout=5"]
     p = subprocess.run(cmd, cwd=REPO_ROOT, env=env, text=True)
-    sys.exit(p.returncode)
+    if p.returncode != 0:
+      sys.exit(p.returncode)
 
-    if not RESULTS_FILE.exists():
-        print("❌ Could not find autograder/results.json (did conftest.py write it?)")
+   # 6) Apply late policy
+
+    if not results_file.exists():
+        print(f"Could not find results file: {results_file}")
+        print("Did conftest.py write it?")
         sys.exit(1)
 
-    results = json.loads(RESULTS_FILE.read_text(encoding="utf-8"))
+    results = json.loads(results_file.read_text(encoding="utf-8"))
     earned = int(results.get("earned", 0))
     max_points = int(results.get("max", 0))
 
@@ -239,7 +256,6 @@ def main() -> None:
 
     final_score, late_messages = apply_late_policy(
         earned=earned,
-        max_points=max_points,
         labs_touched=labs_touched,
         submitted_at=submitted_at,
     )
