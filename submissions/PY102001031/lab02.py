@@ -34,8 +34,6 @@ def is_balanced_parentheses(s: str) -> bool:
     # TODO: implement using a stack
     # raise NotImplementedError
 
-def is_balanced_parentheses(s: str) -> bool:
-
     pair_dict = {")": "(", "}": "{", "]": "["}
     stack_list = []
 
