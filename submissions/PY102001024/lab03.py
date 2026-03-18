@@ -80,6 +80,7 @@ result = insert_chaining(table,key,size)
 # Q3 — Linear Probing
 # -------------------------
 
+
 def insert_linear_probing(table: list[int | None], key: int) -> list[int | None]:
     """
     Q3:
@@ -109,21 +110,22 @@ def insert_linear_probing(table: list[int | None], key: int) -> list[int | None]
 
     else:
         while not table[next_index] == None:
-            next_index += 1
+            if(next_index == len(table)-1):
+                next_index = 0
+            else:
+                next_index += 1    
 
         table[next_index] = key    
     return table    
 
 
 table = [None, 4, None, None]
-key = 8
 
-result = insert_linear_probing(table,key)
-print(result)
-
-key = 4
+key = 5
 result = insert_linear_probing(table,key)
 
+key = 9
+result = insert_linear_probing(table,key)
 
 # -------------------------
 # Q4 — Quadratic Probing
@@ -171,8 +173,6 @@ table = [None, 7, None, None]
 key = 11
 
 result = insert_quadratic_probing(table,key)
-print(result)
-
 
 key = 15
 result = insert_quadratic_probing(table,key)
