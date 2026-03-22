@@ -147,7 +147,3 @@ def find_py_files(root: TreeNode) -> list[str]:
     # Start traversal
     traverse(root, None)
     return python_files
-
-# # Testing the new logic:
-py_list = find_py_files(root_node)
-print(f"Found Python files: {py_list}")
