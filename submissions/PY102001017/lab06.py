@@ -119,7 +119,7 @@ def personal_priority_q():
         (5, "money")
     ]
 
-    new_item = (6, "security")
+    new_item = (1, "security")
     priorty_q.append(new_item)
 
     current_index = len(priorty_q) - 1
