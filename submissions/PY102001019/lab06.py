@@ -83,7 +83,6 @@ def process_next_job(arr):
     # Job with highest priority
     removed_job = arr[0]
 
-    
     # Move last element to root and remove last
     arr[0] = arr[-1]
     arr.pop()
@@ -127,7 +126,6 @@ def personal_priority_q():
     ]
     # TODO: append new_item to personal_priorty_q
     new_item = (3, "security")
-
     
     # Build heap properly
     heap = []
@@ -135,7 +133,6 @@ def personal_priority_q():
         heap.append(item)
         helper_fun1_(heap, len(heap) - 1)
 
-    
     # Insert new category
     heap.append(new_item)
     helper_fun1_(heap, len(heap) - 1)
