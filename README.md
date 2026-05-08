@@ -32,7 +32,7 @@ This method allows you to submit your homework directly through the GitHub websi
 * At the bottom of the page, add a clear and descriptive commit message, such as: `Submit Lab 1 - [Your ID]`.
 * Click the **'Commit changes'** button.
 * Go back to the main page of your forked repository. You should see a banner indicating that your changes are ready to be submitted. Click **'Contribute'** and then **'Open pull request'**.
-* On the next screen, give your pull request a clear title and description, and then click **'Create pull request'** to submit.
+* On the next screen, give your pull request a clear title and descriptionb (include your student ID and lab number), and then click **'Create pull request'** to submit.
 
 ---
 
